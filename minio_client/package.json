@@ -1,0 +1,23 @@
+{
+  "name": "minio_client",
+  "version": "1.0.0",
+  "description": "fill bucket",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/l3043Y/minio.git"
+  },
+  "author": "l3043y",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/l3043Y/minio/issues"
+  },
+  "homepage": "https://github.com/l3043Y/minio#readme",
+  "dependencies": {
+    "minio": "^7.0.26"
+  }
+}
