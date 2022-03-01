@@ -30,3 +30,8 @@ services:
       - /mnt/data2:/data2
       - /mnt/data3:/data3
       - /mnt/data4:/data4
+  
+  kes:
+    image: minio/kes
+    volumes:
+      - ./kes:/opt/kes
