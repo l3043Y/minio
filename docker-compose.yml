@@ -9,9 +9,14 @@ x-minio-common: &minio-common
   expose:
     - "9000"
     - "9001"
-  # environment:
-  #   MINIO_ROOT_USER: minio
-  #   MINIO_ROOT_PASSWORD: minio123
+  environment:
+    - MINIO_KMS_KES_ENDPOINT=https://127.0.0.1:7373
+    - MINIO_KMS_KES_CERT_FILE=/opt/kes/kes-fs/app.cert
+    - MINIO_KMS_KES_KEY_FILE=/opt/kes/kes-fs/app.key
+    - MINIO_KMS_KES_CAPATH=/opt/kes/server.crt
+    - MINIO_KMS_KES_KEY_NAME=app-key
+    # MINIO_ROOT_USER: minio
+    # MINIO_ROOT_PASSWORD: minio123
   healthcheck:
     test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
     interval: 30s
@@ -26,6 +31,7 @@ services:
     <<: *minio-common
     hostname: minio1
     volumes:
+      - ./kes:/opt/kes
       - /mnt/data1:/data1
       - /mnt/data2:/data2
       - /mnt/data3:/data3
@@ -33,5 +39,12 @@ services:
   
   kes:
     image: minio/kes
+    network_mode: host
+    restart: always
+    command: server --config /opt/kes/kes-fs/config.yml --auth off
+    environment:
+      - APP_IDENTITY=257f278afe6810bf3928cd3c5e37d33be21cc7244bcdf974eb273ba45ccb6615
+      - KES_CLIENT_KEY=/opt/kes/kes-fs/app.key
+      - KES_CLIENT_CERT=/opt/kes/kes-fs/app.cert
     volumes:
       - ./kes:/opt/kes

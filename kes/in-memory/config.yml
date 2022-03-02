@@ -1,0 +1,9 @@
+address: 0.0.0.0:7373
+
+admin:
+  # Insert the identity of your 'root.crt' here.
+  identity: 1a6caa289b048029a4387d0437d60726bc363f335bc0c6a9726d0c7d94f1a8ee
+
+tls:
+  key:  /opt/kes/server.key
+  cert: /opt/kes/server.crt
