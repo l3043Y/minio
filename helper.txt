@@ -4,3 +4,32 @@ curl -sSL --tlsv1.3 --http2 \
     --key root.key \
     --cert root.cert \
     -X POST 'https://play.min.io:7373/v1/key/create/my-key'
+
+/var/tmp/curl/src/curl -sSL --tlsv1.3 --http2 \
+    --key root.key \
+    --cert root.cert \
+    --data '{}' \
+    -X POST 'https://play.min.io:7373/v1/key/generate/my-key'
+
+
+openssl ecparam -genkey -name prime256v1 | openssl ec -out server.key
+
+openssl req -new -x509 -days 30 -key server.key -out server.crt -subj "/C=/ST=/L=/O=/CN=localhost" -addext "subjectAltName = IP:127.0.0.1"
+
+docker run -v /$(pwd):/opt/ --rm -it minio/kes tool identity new --key=/opt/root.key --cert=/opt/root.crt root
+docker run -v /$(pwd):/opt/ --rm -it minio/kes tool identity of /opt/root.crt
+
+docker exec -it 9bd01c630a8d ./kes key create -k my-key
+docker exec -it 9bd01c630a8d ./kes key derive -k my-key
+
+MINIO_KMS_KES_ENDPOINT=https://127.0.0.1:7373
+MINIO_KMS_KES_CERT_FILE=minio.cert
+MINIO_KMS_KES_KEY_FILE=minio.key
+MINIO_KMS_KES_CAPATH=server.cert
+MINIO_KMS_KES_KEY_NAME=my-minio-key
+
+docker run -v /$(pwd):/opt/ --rm -it minio/kes tool identity new --key=/opt/app.key --cert=/opt/app.cert app
+docker run -v /$(pwd):/opt/ --rm -it minio/kes tool identity of /opt/app.cert
+
+docker exec -it d8af0 ./kes key create -k app-key
+ docker exec -it d8af0 ./kes key derive -k app-key

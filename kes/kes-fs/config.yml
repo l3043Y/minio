@@ -1,0 +1,21 @@
+address: 0.0.0.0:7373
+root:   disabled  # We disable the root identity since we don't need it in this guide 
+admin:
+  identity: disabled  # We disable the root identity since we don't need it in this guide 
+  
+tls:
+  key:  /opt/kes/server.key
+  cert: /opt/kes/server.crt
+
+policy:
+  my-app: 
+    allow:
+    - /v1/key/create/app-key*
+    - /v1/key/generate/app-key*
+    - /v1/key/decrypt/app-key*
+    identities:
+    - ${APP_IDENTITY}
+
+keystore:
+  fs:
+    path: /opt/kes/kes-fs/keys # Choose a directory for the secret keys
