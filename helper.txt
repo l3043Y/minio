@@ -1,6 +1,3 @@
 sudo mkdir /mnt/data4 && sudo  mount /dev/sdd /mnt/data4
 
-curl -sSL --tlsv1.3 --http2 \
-    --key root.key \
-    --cert root.cert \
-    -X POST 'https://play.min.io:7373/v1/key/create/my-key'
+curl -sSL --tlsv1.3 --http2 --key root.key   --cert root.cert  -X POST 'https://play.min.io:7373/v1/key/create/my-key'
